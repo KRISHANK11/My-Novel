@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapter 9 — Three Months | The Scythe of the Ashen Light</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Cinzel:wght@400;600&family=EB+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{--neon-blue:#00c8ff;--vivid-purple:#a855f7;--neon-pink:#ff3cac;--soft-pink:#f472b6;--dark-bg:#05030f;--panel-bg:rgba(10,5,30,.72);--blue-glow:0 0 20px rgba(0,200,255,.9),0 0 50px rgba(0,200,255,.4);--pink-glow:0 0 20px rgba(255,60,172,.9),0 0 50px rgba(255,60,172,.4)}
+html,body{width:100%;height:100%;background:var(--dark-bg);font-family:'EB Garamond',serif;color:#e8deff;overflow:hidden}
+canvas#bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none}
+#parallax-layer{position:fixed;inset:0;z-index:0;pointer-events:none;transition:transform .1s ease-out}
+#reader{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;justify-content:center;height:100vh;padding:20px;animation:fadeIn .8s ease forwards}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.chapter-header{text-align:center;margin-bottom:18px}
+.chapter-num{font-family:'Cinzel',serif;font-size:10px;letter-spacing:5px;color:var(--neon-blue);text-transform:uppercase;opacity:.75;margin-bottom:6px}
+.chapter-title{font-family:'Cinzel Decorative',serif;font-size:clamp(15px,3vw,24px);background:linear-gradient(135deg,#ff3cac,#a855f7,#00c8ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:chPulse 4s ease-in-out infinite}
+@keyframes chPulse{0%,100%{filter:drop-shadow(0 0 6px rgba(168,85,247,.4))}50%{filter:drop-shadow(0 0 22px rgba(255,60,172,.85))}}
+.glass-panel{width:100%;max-width:700px;max-height:58vh;background:var(--panel-bg);border:1px solid rgba(168,85,247,.25);border-radius:2px;backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);padding:36px 48px;overflow-y:auto;position:relative;box-shadow:0 0 0 1px rgba(0,200,255,.05),0 0 44px rgba(107,33,168,.32),0 0 110px rgba(107,33,168,.10),inset 0 1px 0 rgba(255,255,255,.05);animation:flicker 7s ease-in-out infinite;scrollbar-width:thin;scrollbar-color:rgba(168,85,247,.4) transparent}
+.glass-panel::-webkit-scrollbar{width:4px}.glass-panel::-webkit-scrollbar-track{background:transparent}.glass-panel::-webkit-scrollbar-thumb{background:rgba(168,85,247,.4);border-radius:2px}
+@keyframes flicker{0%,93%,100%{box-shadow:0 0 0 1px rgba(0,200,255,.05),0 0 44px rgba(107,33,168,.32),0 0 110px rgba(107,33,168,.10),inset 0 1px 0 rgba(255,255,255,.05)}96%{box-shadow:0 0 0 1px rgba(0,200,255,.10),0 0 60px rgba(107,33,168,.50),0 0 130px rgba(107,33,168,.18),inset 0 1px 0 rgba(255,255,255,.09)}}
+.glass-panel::before{content:'';position:absolute;top:0;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,rgba(168,85,247,.65),rgba(0,200,255,.45),transparent)}
+.glass-panel::after{content:'';position:absolute;bottom:0;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,rgba(255,60,172,.45),rgba(168,85,247,.55),transparent)}
+.novel-text{font-family:'EB Garamond',serif;font-size:17.5px;line-height:2;color:rgba(230,215,255,.92);text-align:justify;text-shadow:0 0 30px rgba(168,85,247,.12)}
+.novel-text p{margin-bottom:1.5em}
+.novel-text p:first-child::first-letter{font-family:'Cinzel Decorative',serif;font-size:3.4em;float:left;line-height:.72;margin:6px 12px 0 0;background:linear-gradient(135deg,#ff3cac,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 14px rgba(255,60,172,.75))}
+.novel-text em{color:rgba(244,114,182,.95);font-style:italic;text-shadow:0 0 16px rgba(255,60,172,.5)}
+.nav-controls{display:flex;gap:18px;margin-top:22px;align-items:center}
+.nav-btn{font-family:'Cinzel',serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;padding:11px 30px;background:transparent;border:1px solid rgba(168,85,247,.38);color:rgba(200,180,255,.78);cursor:pointer;transition:all .35s ease;text-decoration:none;display:inline-block}
+.nav-btn:hover{border-color:var(--neon-pink);color:#fff;box-shadow:0 0 28px rgba(255,60,172,.55),0 0 55px rgba(168,85,247,.25);transform:translateY(-3px);text-shadow:0 0 12px rgba(255,255,255,.7)}
+.nav-btn.disabled{opacity:.22;pointer-events:none;cursor:default}
+.page-indicator{font-family:'Cinzel',serif;font-size:10px;letter-spacing:2px;color:rgba(168,85,247,.5);min-width:48px;text-align:center}
+.back-home-btn{font-family:'Cinzel',serif;font-size:9px;letter-spacing:3px;text-transform:uppercase;padding:8px 22px;background:transparent;border:1px solid rgba(0,200,255,.18);color:rgba(0,200,255,.45);cursor:pointer;transition:all .3s ease;margin-top:12px;text-decoration:none;display:inline-block}
+.back-home-btn:hover{color:var(--neon-blue);border-color:var(--neon-blue);box-shadow:0 0 22px rgba(0,200,255,.45);transform:translateY(-2px)}
+#page-turn{position:fixed;inset:0;z-index:100;pointer-events:none;display:flex;align-items:center;justify-content:center;opacity:0}
+#page-turn.turning{animation:pturn 1s cubic-bezier(.4,0,.2,1) forwards}
+@keyframes pturn{0%{opacity:0}20%{opacity:1}80%{opacity:1}100%{opacity:0}}
+.pt-veil{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(107,33,168,.55) 0%,rgba(5,3,15,.96) 65%,rgba(5,3,15,1) 100%)}
+.pt-rune{position:relative;z-index:1;font-family:'Cinzel Decorative',serif;font-size:64px;background:linear-gradient(135deg,#ff3cac,#a855f7,#00c8ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:runeAnim 1s ease-in-out forwards;filter:drop-shadow(0 0 32px rgba(168,85,247,1))}
+@keyframes runeAnim{0%{transform:rotateX(0) scale(.4);opacity:0}35%{transform:rotateX(-12deg) scale(1.15);opacity:1}65%{transform:rotateX(8deg) scale(1);opacity:1}100%{transform:rotateX(0) scale(.4);opacity:0}}
+@media(max-width:600px){.glass-panel{padding:24px 22px;max-height:55vh}.novel-text{font-size:15px;line-height:1.85}.nav-btn{padding:10px 18px;font-size:9px}}
+</style>
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+<div id="parallax-layer" aria-hidden="true"></div>
+
+<div id="reader">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter IX</div>
+    <h1 class="chapter-title">Three Months</h1>
+  </div>
+  <div class="glass-panel" id="textPanel">
+    <div class="novel-text">
+      <p>They stepped out of the bunker into daylight.</p>
+
+      <p>For a moment, none of them spoke.</p>
+
+      <p>The sun felt strange after weeks underground. The air was warmer. Louder. Cars passed on the nearby road. Somewhere in the distance, someone was walking a dog.</p>
+
+      <p>The world looked completely normal. Completely unaware.</p>
+
+      <p>Kairo stood still, letting his eyes adjust to the brightness. After everything they had learned, the outside world felt almost unreal. People moved through their daily routines without a second thought. They had no idea what was coming.</p>
+
+      <p>Behind them, Solen walked quietly with his hood raised. No one paid him any attention. He moved through the small crowd naturally, like someone who had spent centuries studying human behavior and knew exactly how to disappear inside it.</p>
+
+      <p>Kairo watched him for a moment. There was something strange about the way Solen moved.</p>
+
+      <p>He never looked directly at anything. His head barely shifted. His eyes stayed low, almost half-closed. Yet somehow he navigated every person, every obstacle, every gap in the crowd without hesitation. Without error.</p>
+
+      <p>As if he didn't need to look at all. As if he already knew where everything was.</p>
+
+      <p>Kairo filed that thought away quietly.</p>
+
+      <p>Korosu pulled out his phone and stared at the screen for a moment before dialing. His father answered almost immediately.</p>
+
+      <p>“I'm coming home,” Korosu said. There was a pause on the other end. “I need to talk to you.”</p>
+
+      <p>His father's voice returned tight and controlled, asking where he had been for the last few weeks. Korosu didn't give details. He simply repeated that he was on his way, then ended the call.</p>
+
+      <p>He looked at Kairo. “I have to handle things at home before we leave. If I just vanish, the local police will start looking into everything. That’s the last thing we need right now.”</p>
+
+      <p>Kairo nodded. “How long?”</p>
+
+      <p>“Give me three months,” Korosu said. “I need to tie up loose ends, gather supplies, and make sure my absence doesn't trigger any alarms. After that, we go after the Second Doctrine.”</p>
+
+      <p>Kairo adjusted the strap of his bag. “Three months. I'll lay low until then.”</p>
+
+      <p>They split up near the edge of the town. Korosu headed toward the transit station, while Kairo and Solen moved in the opposite direction, toward the quieter, less traveled industrial districts where hiding was easier.</p>
+
+      <p>The next twelve weeks passed in a blur of quiet routine.</p>
+
+      <p>Kairo spent most of his days inside an abandoned warehouse Solen had located near the city docks. It was dark, dusty, and completely isolated from the public. It provided the perfect space to continue his basic physical training without drawing attention.</p>
+
+      <p>He didn't summon the scythe during this period. Remembering Korosu's warnings about the outward energy pulse, he kept the weapon completely dormant inside the black locket. He couldn't risk sending out another beacon to whatever else might be hunting him in the dark.</p>
+
+      <p>Instead, he focused entirely on conditioning his body, building up the stamina and strength required to handle the scythe's immense weight when the time finally came to call it forth again.</p>
+
+      <p>When the three months were up, Korosu returned exactly as promised.</p>
+
+      <p>He met them at the warehouse doors just after midnight, carrying a fresh pack of supplies and the keys to an old, non-descript sedan he had acquired. His face looked tired, but his eyes were sharp.</p>
+
+      <p>“Everything is settled,” Korosu said, throwing his pack into the back seat. “No one is looking for us. We're completely off the grid.”</p>
+
+      <p>Kairo climbed into the passenger seat, while Solen quietly slid into the back. Korosu started the engine, and the car pulled away from the warehouse, heading east toward the state highway.</p>
+
+      <p>An hour into the drive, the city lights had completely faded behind them, replaced by the dark outlines of open fields and distant hills. Korosu kept his eyes on the road, watching the dashboard GPS navigate toward the coordinates Velran had left behind.</p>
+
+      <p>“I've been thinking about what the tree said,” Kairo spoke up breaks the silence, staring out into the dark landscape passing by. “About Velran losing his sight when he unlocked the Second Doctrine.”</p>
+
+      <p>Korosu glanced at him. “You think it's literal?”</p>
+
+      <p>“Solen mentioned it earlier,” Kairo said. “Velran lost his vision entirely during the transition. I didn't understand why at first. It felt like a punishment. Or a failure.”</p>
+
+      <p>Solen didn't speak from the back seat, but the car's interior light caught the steady focus of his posture.</p>
+
+      <p>“But it wasn't a failure,” Kairo continued. “It was a beginning. As a choice to strip away the thing he trusted most so that everything underneath could finally wake up.”</p>
+
+      <p>He thought about what Solen had described earlier about his own movements. Air shifting. Ground vibrating. Sound bending. A world full of signals that eyes simply shouted over.</p>
+
+      <p>And suddenly the connection was clear.</p>
+
+      <p>“The Second Doctrine isn't about sight,” Kairo said quietly.</p>
+
+      <p>Korosu looked at him. “What do you mean?”</p>
+
+      <p>“It's about what's underneath sight,” Kairo's voice stayed calm. Even. “If you go blind, you don't lose awareness. You lose the noise. And then… everything else gets louder.”</p>
+
+      <p>He paused.</p>
+
+      <p>“You start feeling danger before you see it.”</p>
+
+      <p>Korosu stared at him for a second before looking back at the road. “Like sensing a move before it happens?”</p>
+
+      <p>“Like knowing it's already on its way,” Kairo replied.</p>
+
+      <p>The road ahead stretched on. The GPS continued glowing on the dashboard, still pointing steadily east.</p>
+
+      <p>Korosu leaned back slowly against his seat. “So the Second Doctrine starts with losing sight.” He exhaled. “And ends with seeing everything.”</p>
+
+      <p>Solen said nothing.</p>
+
+      <p>But in the rearview mirror, Kairo caught the faintest nod. Not a confirmation. Something older than that. Recognition.</p>
+
+      <p>The world outside the windows remained peaceful. Normal. Unaware.</p>
+
+      <p>But inside the car, something had shifted.</p>
+
+      <p>The First Doctrine had been about becoming still enough to hold the weapon.</p>
+
+      <p>The Second would be about becoming quiet enough to hear the world.</p>
+
+      <p>And somewhere ahead, waiting beyond the horizon — it was already watching them approach.</p>
+    </div>
+  </div>
+  <nav class="nav-controls">
+    <a class="nav-btn" href="chapter8.html" onclick="navTo(this.href);return false">&#8592; Previous</a>
+    <span class="page-indicator">IX / IX</span>
+    <span class="nav-btn disabled">Next &#8594;</span>
+  </nav>
+  <a class="back-home-btn" href="index.html">&#8617; Return to Archive</a>
+</div>
+
+<div id="page-turn" aria-hidden="true">
+  <div class="pt-veil"></div>
+  <div class="pt-rune">&#10795;</div>
+</div>
+<script>
+
+const canvas=document.getElementById('bg'),ctx=canvas.getContext('2d');
+let W,H,particles=[],clouds=[];
+function resize(){W=canvas.width=window.innerWidth;H=canvas.height=window.innerHeight}
+function init(){
+  particles=[];clouds=[];
+  for(let i=0;i<140;i++)particles.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.28,vy:(Math.random()-.5)*.18,r:Math.random()*1.9+.25,a:Math.random()*.65+.15,color:['#a855f7','#00c8ff','#ff3cac','#c084fc','#67e8f9'][Math.floor(Math.random()*5)],p:Math.random()*Math.PI*2,ps:.012+Math.random()*.022});
+  const nc=['rgba(107,33,168,','rgba(0,80,180,','rgba(160,20,90,','rgba(60,10,130,','rgba(0,120,160,','rgba(130,0,80,','rgba(80,0,140,'];
+  for(let i=0;i<7;i++)clouds.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.10,vy:(Math.random()-.5)*.07,rx:100+Math.random()*220,ry:70+Math.random()*150,color:nc[i%nc.length],a:.028+Math.random()*.038});
+}
+function draw(){
+  ctx.clearRect(0,0,W,H);ctx.fillStyle='#05030f';ctx.fillRect(0,0,W,H);
+  clouds.forEach(c=>{
+    ctx.save();ctx.scale(1,c.ry/c.rx);
+    const g=ctx.createRadialGradient(c.x,c.y*(c.rx/c.ry),0,c.x,c.y*(c.rx/c.ry),c.rx);
+    g.addColorStop(0,c.color+(c.a*2.2)+')');g.addColorStop(.5,c.color+c.a+')');g.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.beginPath();ctx.arc(c.x,c.y*(c.rx/c.ry),c.rx,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();ctx.restore();
+    c.x+=c.vx;c.y+=c.vy;
+    if(c.x<-c.rx)c.x=W+c.rx;if(c.x>W+c.rx)c.x=-c.rx;if(c.y<-c.ry)c.y=H+c.ry;if(c.y>H+c.ry)c.y=-c.ry;
+  });
+  particles.forEach(p=>{
+    p.p+=p.ps;const a=p.a*(.65+.35*Math.sin(p.p));
+    ctx.globalAlpha=a;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.color;ctx.fill();ctx.globalAlpha=1;
+    p.x+=p.vx;p.y+=p.vy;
+    if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;
+  });
+}
+function loop(){draw();requestAnimationFrame(loop)}
+document.addEventListener('mousemove',e=>{const mx=(e.clientX/innerWidth-.5)*2,my=(e.clientY/innerHeight-.5)*2;document.getElementById('parallax-layer').style.transform=`translate(${mx*9}px,${my*6}px)`});
+function navTo(href){const ov=document.getElementById('page-turn');ov.classList.add('turning');setTimeout(()=>{window.location.href=href},480);}
+window.addEventListener('resize',()=>{resize();init()});
+resize();init();loop();
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown')navTo('chapter2.html');
+});
+</script>
+</body>
+</html>
